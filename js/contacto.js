@@ -117,6 +117,21 @@ export default class Contacto {
   set notas(nuevasNotas) {
     this.#notas = nuevasNotas;
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      nombre: this.nombre,
+      apellido: this.apellido,
+      telefono: this.telefono,
+      email: this.email,
+      notas: this.notas,
+      imagen: this.imagen,
+      empresa: this.empresa,
+      puestoTrabajo: this.puestoTrabajo,
+      direccion: this.#direccion,
+    };
+  }
 }
 
 

@@ -13,6 +13,14 @@ const inputImagen = document.getElementById("imagen");
 const inputPuestoTrabajo = document.getElementById("puestoTrabajo");
 const inputEmpresa = document.getElementById("empresa");
 
+const agenda = JSON.parse(localStorage.getItem("agendaKey")) || [];
+console.log(agenda);
+
+
+const guardarLocalStorage = () => {
+  localStorage.setItem("agendaKey", JSON.stringify(agenda));
+}
+
 const crearContacto = () => {
   const contactoNuevo = new Contacto(
     inputNombre.value,
@@ -26,8 +34,14 @@ const crearContacto = () => {
     inputPuestoTrabajo.value,
     inputDireccion.value,
     inputNotas.value  
-
   );
+
+  agenda.push(contactoNuevo);
+  console.log(contactoNuevo);
+
+  guardarLocalStorage();
+  
+
 };
 
 const modalFormularioContacto = new bootstrap.Modal(
