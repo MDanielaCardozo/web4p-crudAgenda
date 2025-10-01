@@ -12,6 +12,10 @@ const inputNotas = document.getElementById("notas");
 const inputImagen = document.getElementById("imagen");
 const inputPuestoTrabajo = document.getElementById("puestoTrabajo");
 const inputEmpresa = document.getElementById("empresa");
+const tbody = document.getElementById("tablaContactosBody");
+const tabla = document.querySelector(".table-responsive");
+const seccionDetalles = document.getElementById("seccionDetalleContacto");
+const seccionTablaContactos = document.getElementById("seccionTablaContactos");
 
 let inputID = document.getElementById("contactoId");
 
@@ -24,7 +28,7 @@ const guardarLocalStorage = () => {
 
 const crearContacto = () => {
   const contactoNuevo = new Contacto(
-    inputID = null,
+    (inputID = null),
     inputNombre.value,
     inputApellido.value,
     inputTelefono.value,
@@ -53,18 +57,60 @@ const crearContacto = () => {
   limpiarFormulario();
 
   dibujarFila();
-
-  
 };
 
 function limpiarFormulario() {
   formularioContacto.reset();
 }
 
-const dibujarFila = () => {
- 
-                
+const cargarContactos = () => {
+  if (agenda.length !== 0) {
+    agenda.map((itemContacto, indice) => dibujarFila(itemContacto, indice + 1));
+  } else {
+    mostrarNoHayDisponibles();
+  }
 };
+
+const dibujarFila = () => {
+  tbody.innerHTML += `
+  <tr>
+                <th scope="row"></th>
+                <td>Juan</td>
+                <td>Perez</td>
+                <td>238477288</td>
+                <td>
+                  <img src="" alt="" class="img-thumnail img-table" />
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-info btn-sm me-2 btn-ver-detalle"
+                  >
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-warning btn-sm me-2 btn-editar"
+                  >
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm me-2 btn-borrar"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+  `;
+};
+
+const mostrarNoHayDisponibles = () => {
+  const parrafo = document.createElement("p");
+  parrafo.classList.add('text-center');
+  parrafo.textContent = "No hay contactos disponibles";
+  tabla.appendChild(parrafo);
+}
 
 const modalFormularioContacto = new bootstrap.Modal(
   document.getElementById("contactoModal")
@@ -79,3 +125,5 @@ formularioContacto.addEventListener("submit", (e) => {
 
   crearContacto();
 });
+
+cargarContactos();
