@@ -125,11 +125,11 @@ export default class Contacto {
       apellido: this.apellido,
       telefono: this.telefono,
       email: this.email,
-      notas: this.notas,
       imagen: this.imagen,
       empresa: this.empresa,
       puestoTrabajo: this.puestoTrabajo,
-      direccion: this.#direccion,
+      direccion: this.direccion,
+      notas: this.notas,
     };
   }
 }
