@@ -28,7 +28,7 @@ const guardarLocalStorage = () => {
 
 const crearContacto = () => {
   const contactoNuevo = new Contacto(
-    (inputID = null),
+    inputID = null,
     inputNombre.value,
     inputApellido.value,
     inputTelefono.value,
@@ -56,7 +56,7 @@ const crearContacto = () => {
 
   limpiarFormulario();
 
-  dibujarFila();
+  dibujarFila(contactoNuevo, agenda.length);
 };
 
 function limpiarFormulario() {
@@ -71,32 +71,39 @@ const cargarContactos = () => {
   }
 };
 
-const dibujarFila = () => {
+const dibujarFila = (itemContacto, fila) => {
+  if (tabla.children.length === 2) {
+    tabla.children[1].remove();
+  }
+
   tbody.innerHTML += `
   <tr>
-                <th scope="row"></th>
-                <td>Juan</td>
-                <td>Perez</td>
-                <td>238477288</td>
+                <th scope="row">${fila}</th>
+                <td>${itemContacto.nombre}</td>
+                <td>${itemContacto.apellido}</td>
+                <td>${itemContacto.telefono}</td>
                 <td>
-                  <img src="" alt="" class="img-thumnail img-table" />
+                  <img src=${itemContacto.imagen} alt=${itemContacto.nombre} class="img-thumbnail img-table" w-100/>
                 </td>
                 <td>
                   <button
                     type="button"
                     class="btn btn-info btn-sm me-2 btn-ver-detalle"
+                    onclick="verDetalle('${itemContacto.id}')"
                   >
                     <i class="bi bi-eye"></i>
                   </button>
                   <button
                     type="button"
                     class="btn btn-warning btn-sm me-2 btn-editar"
+                    onclick="prepararContacto('${itemContacto.id}')"
                   >
                     <i class="bi bi-pencil"></i>
                   </button>
                   <button
                     type="button"
                     class="btn btn-danger btn-sm me-2 btn-borrar"
+                    onclick="borrarContacto('${itemContacto.id}')"
                   >
                     <i class="bi bi-trash"></i>
                   </button>
@@ -104,6 +111,64 @@ const dibujarFila = () => {
               </tr>
   `;
 };
+
+
+window.borrarContacto = (id) => {
+  Swal.fire({
+  title: "Estas seguro de eliminar el contacto?",
+  text: "No podes revertir este paso",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Borrar",
+  cancelButtonText: "Cancelar",
+}).then((result) => {
+  console.log(result);
+  
+  if (result.isConfirmed) {
+
+    //bucar la posicion del elemento que quiero borrar
+    const indiceContacto = agenda.findIndex((contacto) => contacto.id === id);
+    //borrar un contacto del array agenda
+    agenda.splice(indiceContacto, 1);
+
+    guardarLocalStorage();
+
+    tbody.children[indiceContacto].remove();
+
+    if (tbody.children.length === 0) {
+      mostrarNoHayDisponibles();
+    }
+
+    const filasRestantes = tbody.children;
+
+    for (let i = 0; i < filasRestantes.length; i++) {
+      const celdaIndice = filasRestantes[i].querySelector('th');
+      if (celdaIndice) {
+        celdaIndice.textContent = i + 1;
+      }
+      
+    }
+
+    Swal.fire({
+      title: "Contacto eliminado",
+      text: "El contacto fue eliminado satisfactoriamente",
+      icon: "success"
+    });
+    console.log(agenda);
+    
+  }
+});
+}
+
+window.prepararContacto = (id) => {
+
+}
+
+window.verDetalleContacto = (id) => {
+
+}
 
 const mostrarNoHayDisponibles = () => {
   const parrafo = document.createElement("p");
